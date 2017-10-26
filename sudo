@@ -1,0 +1,64 @@
+#!/bin/sh
+
+function usage_exit() {
+    local command_name=$(basename "$0")
+    cat << EOF >&2
+Usage: $command_name command
+       $command_name -e file
+       $command_name -v
+EOF
+    exit 1
+}
+
+edit_flg=0
+while getopts :veh opt; do
+    case $opt in
+        v)
+            exit 0
+            ;;
+        e)
+            edit_flg=1
+            ;;
+        h)
+            usage_exit
+            ;;
+        \?)
+            usage_exit
+            ;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ $edit_flg -eq 1 ]; then
+    if [ $# -ne 1 ]; then
+        usage_exit
+    fi
+
+    sudoedit "$1"
+else
+    if [ $# -eq 0 ]; then
+        usage_exit
+    fi
+
+    process_id=$(mktemp)
+    shell_command=$(mktemp)
+
+    trap 'rm -f $process_id $shell_command' 0
+
+    quote_pwd=$(printf '%q' "$PWD")
+    quote_cmd=''
+
+    for arg in "$@"; do
+        quote_arg=$(printf '%q' "$arg")
+        quote_cmd="$quote_cmd $quote_arg"
+    done
+
+    echo "cd $quote_pwd; $quote_cmd" > $shell_command
+
+    trap 'trap "" 1 2 3 15; ps | sed "s/^.//" | awk "\$2 == \"$(cat $process_id)\" {print \$4}" | "$0" xargs -I % c:/Windows/system32/taskkill /pid % /f > /dev/null 2>&1' 1 2 3 15
+
+    cygstart --hide -w -a runas sh -l -c "'echo \$\$ > $process_id; exec < /proc/$$/fd/0 > /proc/$$/fd/1 2> /proc/$$/fd/2; source $shell_command'" &
+
+    wait $!
+fi

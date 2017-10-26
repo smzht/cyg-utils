@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# 以下の内容を .bashrc 等で設定してください。ここでアンコメント化して有効にすることもできます。
+# EDITOR='emacsclient'
+# EDITOR='emacsclient -s ~/.emacs.d/server' # for gnupack-12.01 or later
+# EDITOR='vim'
+
+function usage_exit() {
+    local command_name=$(basename "$0")
+    echo "Usage: $command_name file" >&2
+    exit 1
+}
+
+if getopts : opt; then
+    usage_exit
+fi
+
+# オプションに -- が指定されたときに $# を１マイナスする
+# -- は、- で始まるファイルを編集する場合に必要なオプション
+shift $((OPTIND - 1))
+
+if [ $# -ne 1 ]; then
+    usage_exit
+fi
+
+if [ -z "$EDITOR" ]; then
+    EDITOR='vi'
+fi
+
+edit_file="$1"
+
+template='XXXXXXXX.'$(basename -- "$edit_file")
+temp_file=$(mktemp -u --tmpdir -- "$template")
+
+trap 'rm -f "$temp_file"' 0 1 2 3 15
+
+if [ -f "$edit_file" ]; then
+    if [ -r "$edit_file" ]; then
+        cp --preserve=timestamps -- "$edit_file" "$temp_file"
+    else
+        sudo cp --preserve=timestamps -- "$edit_file" "$temp_file"
+    fi
+fi
+
+eval "$EDITOR" '"$temp_file"'
+
+if [ -f "$edit_file" ] && [ "$temp_file" -nt "$edit_file" ] || [ ! -f "$edit_file" ] && [ -f "$temp_file" ]; then
+    sudo cp -- "$temp_file" "$edit_file"
+fi

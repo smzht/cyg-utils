@@ -1,0 +1,29 @@
+#+STARTUP: showall indent
+
+* Cygwin Utilities
+
+Cygwin で動作するユティリティコマンド群です。
+
+** sudo
+
+sudo 的コマンドです。
+
+詳しくは以下を参照してください。
+
+- [[https://www49.atwiki.jp/ntemacs/pages/58.html][Cygwin で sudo 的コマンドを使うための設定]]
+
+** sudoedit
+
+sudoedit 的コマンドです。
+
+詳しくは以下を参照してください。
+
+- [[https://www49.atwiki.jp/ntemacs/pages/59.html][Cygwin で sudoedit を使うための設定]]
+
+** sglstart
+
+singleton な動きをする cygstart 的コマンドです。
+
+詳しくは以下を参照してください。
+
+- [[https://www49.atwiki.jp/ntemacs/pages/60.html][singleton な動きをする cygstart 的コマンドを使うための設定 （Cygwin版）]]
