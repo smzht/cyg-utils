@@ -14,6 +14,14 @@ function usage_exit() {
     exit 1
 }
 
+if getopts : opt; then
+    usage_exit
+fi
+
+# オプションに -- が指定されたときに $# を１マイナスする
+# -- は、- で始まるファイルを利用する場合に必要なオプション
+shift $((OPTIND - 1))
+
 if [ $# -ne 1 ]; then
     usage_exit
 fi
@@ -26,7 +34,7 @@ function run() {
 
 # ターゲットファイルが存在するか？
 if [ -e "$1" ]; then
-    cyg_path=$(readlink -f "$1")
+    cyg_path=$(readlink -m -- "$1")
 
     if [ -f "$cyg_path" ]; then
         file_name=$(basename "$cyg_path")
@@ -101,5 +109,5 @@ else:
     cygstart "$cyg_path"
 else
     # ターゲットファイルが存在しない場合（コマンドや URL が指定された場合）は、そのまま開く。
-    cygstart "$1"
+    cygstart -- "$1"
 fi
