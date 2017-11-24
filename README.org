@@ -4,7 +4,7 @@
 
 Cygwin で動作するユティリティコマンド群です。
 
-** sudo
+** ■ sudo
 
 sudo 的コマンドです。
 
@@ -12,7 +12,7 @@ sudo 的コマンドです。
 
 - [[https://www49.atwiki.jp/ntemacs/pages/58.html][Cygwin で sudo 的コマンドを使うための設定]]
 
-** sudoedit
+** ■ sudoedit
 
 sudoedit 的コマンドです。
 
@@ -20,7 +20,7 @@ sudoedit 的コマンドです。
 
 - [[https://www49.atwiki.jp/ntemacs/pages/59.html][Cygwin で sudoedit を使うための設定]]
 
-** sglstart
+** ■ sglstart
 
 singleton な動きをする cygstart 的コマンドです。
 
