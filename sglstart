@@ -1,15 +1,8 @@
 #!/bin/bash
 # -*- mode: sh; coding: utf-8-unix -*-
 
-# Windows版Python のコマンドを絶対パスで指定する
-python_command='C:\Users\<username>\AppData\Local\Programs\Python\Python36-32\python.exe'
-
-# Keyhac のインストールパスを指定する（最後の \ は不要）
-keyhac_dir='C:\keyhac'
-
-command_name=$(basename "$0")
-
 function usage_exit() {
+    local command_name=$(basename "$0")
     echo "Usage: $command_name file" >&2
     exit 1
 }
@@ -26,88 +19,14 @@ if [ $# -ne 1 ]; then
     usage_exit
 fi
 
-function run() {
-    command=$(cygpath -u "$1")
-    shift
-    "$command" "$@"
-}
+if [ -f "$1" ]; then
 
-# ターゲットファイルが存在するか？
-if [ -e "$1" ]; then
-    cyg_path=$(readlink -m -- "$1")
+    file_name=$(basename "$1")
 
-    if [ -f "$cyg_path" ]; then
-        file_name=$(basename "$cyg_path")
-
-        # ウィンドウのタイトルにファイル名の文字列を含むものがあればポップアップする
-        run "$python_command" - "$file_name" <<< '
-import sys
-import os.path
-import re
-import time
-import importlib.abc
-
-# Keyhac のインストールパスを指定する
-keyhac_dir = r"'"${keyhac_dir}"'\\"
-
-sys.path.append(keyhac_dir + "library.zip")
-sys.path.append(keyhac_dir + "lib")
-
-class CustomPydFinder(importlib.abc.MetaPathFinder):
-    def find_module(self, fullname, path=None):
-        pyd_filename_body = fullname.split(".")[-1]
-        pyd_fullpath = os.path.exists(keyhac_dir + "lib\\" + pyd_filename_body + ".pyd")
-        if pyd_fullpath:
-            for importer in sys.meta_path:
-                if isinstance(importer, self.__class__):
-                    continue
-                loader = importer.find_module(fullname, None)
-                if loader:
-                    return loader
-
-sys.meta_path.append(CustomPydFinder())
-
-import pyauto
-
-def popWindow(wnd, file):
-    global is_opened
-
-    base = re.sub("\.[^.]+$", "", file)
-    title =  wnd.getText()
-
-    if wnd.isVisible() and not wnd.getOwner() and wnd.getClassName() != "Emacs" and \
-       (re.search("(^| )" + re.escape(file) + "( |$)", title) or \
-        re.search("(^| )" + re.escape(base) + "( |$)", title)):
-
-        # ポップアップするウィンドウにフォーカスが移らないことがあることの対策
-        # if wnd.isMinimized(): # ← 対策前の設定
-        #     wnd.restore()     # ← 対策前の設定
-        wnd.minimize()
-        wnd.restore()
-
-        wnd.getLastActivePopup().setForeground()
-        is_opened = True
-
-        return False
-    return True
-
-is_opened = False
-pyauto.Window.enum(popWindow, sys.argv[1])
-
-if is_opened:
-    sys.exit(0)
-else:
-    sys.exit(1)
-'
-
-        # ウィンドウのポップアップを行ったか？
-        if [ $? -eq 0 ]; then
-            exit 0
-        fi
+    # ウィンドウのタイトルにファイル名の文字列を含むものがあればポップアップする
+    if winactivate "$file_name"; then
+        exit 0
     fi
-
-    cygstart "$cyg_path"
-else
-    # ターゲットファイルが存在しない場合（コマンドや URL が指定された場合）は、そのまま開く。
-    cygstart -- "$1"
 fi
+
+cygstart -- "$1"
