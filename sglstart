@@ -4,19 +4,24 @@
 function usage_exit() {
     local command_name=$(basename "$0")
     echo "Usage: $command_name file" >&2
-    exit 1
+    exit $1
 }
 
-if getopts : opt; then
-    usage_exit
-fi
+while getopts :h opt; do
+    case $opt in
+        h)
+            usage_exit 0
+            ;;
+        \?)
+            usage_exit 2
+            ;;
+    esac
+done
 
-# オプションに -- が指定されたときに $# を１マイナスする
-# -- は、- で始まるファイルを利用する場合に必要なオプション
 shift $((OPTIND - 1))
 
 if [ $# -ne 1 ]; then
-    usage_exit
+    usage_exit 2
 fi
 
 if [ -f "$1" ]; then
