@@ -6,6 +6,7 @@ function usage_exit() {
 Usage: $command_name command
        $command_name -e file
        $command_name -v
+       $command_name -h
 EOF
     exit $1
 }
