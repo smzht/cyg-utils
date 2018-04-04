@@ -53,7 +53,7 @@ else
 
     for arg in "$@"; do
         quote_arg=$(printf '%q' "$arg")
-        quote_cmd="$quote_cmd $quote_arg"
+        quote_cmd+=" $quote_arg"
     done
 
     echo "cd $quote_pwd; $quote_cmd" > "$shell_command"
