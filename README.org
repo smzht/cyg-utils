@@ -8,6 +8,15 @@ Cygwin で動作するユティリティコマンド群です。
 
 sudo 的コマンドです。
 
+*** 使用方法
+
+#+BEGIN_EXAMPLE
+sudo command
+sudo -e file
+sudo -v
+sudo -h
+#+END_EXAMPLE
+
 詳しくは以下を参照してください。
 
 - [[https://www49.atwiki.jp/ntemacs/pages/58.html][Cygwin で sudo 的コマンドを使うための設定]]
@@ -16,6 +25,13 @@ sudo 的コマンドです。
 
 sudoedit 的コマンドです。
 
+*** 使用方法
+
+#+BEGIN_EXAMPLE
+sudoedit file
+sudoedit -h
+#+END_EXAMPLE
+
 詳しくは以下を参照してください。
 
 - [[https://www49.atwiki.jp/ntemacs/pages/59.html][Cygwin で sudoedit を使うための設定]]
@@ -23,6 +39,13 @@ sudoedit 的コマンドです。
 ** ■ sglstart
 
 singleton な動きをする cygstart 的コマンドです。
+
+*** 使用方法
+
+#+BEGIN_EXAMPLE
+sglstart target
+sglstart -h
+#+END_EXAMPLE
 
 詳しくは以下を参照してください。
 
