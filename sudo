@@ -46,7 +46,7 @@ else
     process_id=$(mktemp)
     shell_command=$(mktemp)
 
-    trap 'rm -f $process_id $shell_command' 0
+    trap 'rm -f "$process_id" "$shell_command"' 0
 
     quote_pwd=$(printf '%q' "$PWD")
     quote_cmd=''
@@ -56,11 +56,15 @@ else
         quote_cmd+=" $quote_arg"
     done
 
-    echo "cd $quote_pwd; $quote_cmd" > $shell_command
+    cat << EOF > "$shell_command"
+echo \$$ > "$process_id"
+LANG=$LANG
+cd $quote_pwd
+$quote_cmd
+EOF
 
-    trap 'trap "" 1 2 3 15; ps | sed "s/^.//" | awk "\$2 == \"$(cat $process_id)\" {print \$4}" | "$0" xargs -I % c:/Windows/system32/taskkill /pid % /f > /dev/null 2>&1' 1 2 3 15
+    trap 'trap "" 1 2 3 15; "$0" kill -- -$(cat "$process_id")' 1 2 3 15
 
-    cygstart --hide -w -a runas sh -l -c "'echo \$\$ > $process_id; exec < /proc/$$/fd/0 > /proc/$$/fd/1 2> /proc/$$/fd/2; source $shell_command'" &
-
+    cygstart --hide -w -a runas sh -l -c "'exec < /proc/$$/fd/0 > /proc/$$/fd/1 2> /proc/$$/fd/2; source \"$shell_command\"'" &
     wait $!
 fi
