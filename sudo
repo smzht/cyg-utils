@@ -57,6 +57,7 @@ else
     done
 
     cat << EOF > "$shell_command"
+exec < /proc/$$/fd/0 > /proc/$$/fd/1 2> /proc/$$/fd/2
 echo \$$ > "$process_id"
 LANG=$LANG
 cd $quote_pwd
@@ -65,6 +66,6 @@ EOF
 
     trap 'trap "" 1 2 3 15; "$0" kill -- -$(cat "$process_id")' 1 2 3 15
 
-    cygstart --hide -w -a runas sh -l -c "'exec < /proc/$$/fd/0 > /proc/$$/fd/1 2> /proc/$$/fd/2; source \"$shell_command\"'" &
+    cygstart --hide -w -a runas sh -l "'$shell_command'" &
     wait $!
 fi
