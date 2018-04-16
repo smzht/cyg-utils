@@ -43,8 +43,8 @@ else
         usage_exit 2
     fi
 
-    process_id=$(mktemp)
-    shell_command=$(mktemp)
+    process_id=$(mktemp -t "$command_name.XXXXXXXXXX")
+    shell_command=$(mktemp -t "$command_name.XXXXXXXXXX")
 
     trap 'rm -f "$process_id" "$shell_command"' 0
 

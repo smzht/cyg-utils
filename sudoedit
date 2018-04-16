@@ -37,8 +37,8 @@ fi
 
 edit_file="$1"
 
-template='XXXXXXXX.'$(basename -- "$edit_file")
-temp_file=$(mktemp -u --tmpdir "$template")
+template='XXXXXXXXXX.'$(basename -- "$edit_file")
+temp_file=$(mktemp -u -t "$template")
 
 trap 'rm -f "$temp_file"' 0 1 2 3 15
 
