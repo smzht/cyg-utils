@@ -57,8 +57,8 @@ else
     done
 
     cat << EOF > "$shell_command"
-exec < /proc/$$/fd/0 > /proc/$$/fd/1 2> /proc/$$/fd/2
 echo \$$ > "$process_id"
+exec < /proc/$$/fd/0 > /proc/$$/fd/1 2> /proc/$$/fd/2
 LANG=$LANG
 cd $quote_pwd
 $quote_cmd
