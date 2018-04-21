@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+# -*- mode: sh; coding: utf-8-unix -*-
 
 # 以下の内容を .bashrc 等で設定してください。ここでアンコメント化して有効にすることもできます。
 # EDITOR='emacsclient'

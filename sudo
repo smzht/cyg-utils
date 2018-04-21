@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+# -*- mode: sh; coding: utf-8-unix -*-
 
 function usage_exit() {
     local command_name=$(basename "$0")
