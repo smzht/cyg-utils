@@ -29,7 +29,7 @@ fi
 
 if [ -f "$1" ]; then
 
-    file_name=$(basename "$1")
+    file_name=$(basename -- "$1")
 
     # ウィンドウのタイトルにファイル名の文字列を含むものがあればポップアップする
     if winactivate "$file_name"; then
