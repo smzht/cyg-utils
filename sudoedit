@@ -36,7 +36,7 @@ if [ -z "$EDITOR" ]; then
     EDITOR='vi'
 fi
 
-edit_file="$1"
+edit_file=$1
 
 template='XXXXXXXXXX.'$(basename -- "$edit_file")
 temp_file=$(mktemp -u -t "$template")
