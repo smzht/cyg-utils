@@ -7,7 +7,9 @@
 # EDITOR='vim'
 
 function usage_exit() {
-    local command_name=$(basename "$0")
+    local command_name
+    command_name=$(basename "$0")
+
     cat << EOF >&2
 Usage: $command_name file
        $command_name -h

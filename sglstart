@@ -2,7 +2,9 @@
 # -*- mode: sh; coding: utf-8-unix -*-
 
 function usage_exit() {
-    local command_name=$(basename "$0")
+    local command_name
+    command_name=$(basename "$0")
+
     cat << EOF >&2
 Usage: $command_name target
        $command_name -h
