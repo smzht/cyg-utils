@@ -69,6 +69,6 @@ EOF
 
     trap 'trap "" 1 2 3 15; "$0" kill -- -$(cat "$process_id")' 1 2 3 15
 
-    cygstart --hide -w -a runas sh -l "'$shell_command'" &
+    cygstart --hide -w -a runas bash -l "'$shell_command'" &
     wait $!
 fi
